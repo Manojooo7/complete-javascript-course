@@ -51,6 +51,9 @@ const account2 = {
 
 const accounts = [account1, account2];
 
+
+
+
 /////////////////////////////////////////////////
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -81,19 +84,27 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const date = new Date(acc.movementsDates[i])
+    const day = `${date.getDate()}`.padStart(2, 0)
+    const month = `${date.getMonth() + 1}`.padStart(2, 0)
+    const year = date.getFullYear()
+    const hour = `${date.getHours()}`.padStart(2, 0)
+    const min = `${date.getMinutes()}`.padStart(2, 0)
+
+    const displayDate = `${day}/${month}/${year}, ${hour}:${min} `;
 
     const html = `
       <div class="movements__row">
-        <div class="movements__type movements__type--${type}">${
-      i + 1
-    } ${type}</div>
+        <div class="movements__type movements__type--${type}">${i + 1
+      } ${type}</div>
+      <div class="movements__date">${displayDate}</div>
         <div class="movements__value">${mov}€</div>
       </div>
     `;
@@ -116,7 +127,7 @@ const calcDisplaySummary = function (acc) {
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.floor(Math.abs(out))}€`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -126,7 +137,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${Math.floor(interest)}€`;
 };
 
 const createUsernames = function (accs) {
@@ -142,7 +153,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   // Display balance
   calcDisplayBalance(acc);
@@ -151,9 +162,36 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogOutTimer = () => {
+  // decalre the time duration 
+  let time = 60;
+  const tick = () => {
+    let min = Math.trunc(time / 60)
+    let sec = Math.trunc(time % 60)
+    // printing remianing time in ui
+    labelTimer.textContent = `${min}:${sec}`;
+    // logout when the timer reach 0
+    if (time === 0) {
+      clearInterval(timer)
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+    // decrease the time by 1 secon d
+    time--;
+  }
+    // Call the timer every second
+  tick()
+  const timer = setInterval(tick, 1000);
+  return timer;
+}
+
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
+
+// currentAccount = account1
+// updateUI(currentAccount)
+// containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -162,19 +200,28 @@ btnLogin.addEventListener('click', function (e) {
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
-  console.log(currentAccount);
+  // console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     // Display UI and message
-    labelWelcome.textContent = `Welcome back, ${
-      currentAccount.owner.split(' ')[0]
-    }`;
+    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]
+      }`;
     containerApp.style.opacity = 100;
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    // display date
+    const date = new Date()
+    const day = `${date.getDate()}`.padStart(2, 0)
+    const month = `${date.getMonth() + 1}`.padStart(2, 0)
+    const year = date.getFullYear()
+    const hour = date.getHours()
+    const min = date.getMinutes()
+    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min} `;
+    if (timer) clearInterval(timer)
+    timer = startLogOutTimer()
     // Update UI
     updateUI(currentAccount);
   }
@@ -198,8 +245,17 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
 
+    // adding transfer date
+    currentAccount.movementsDates.push(new Date())
+    receiverAcc.movementsDates.push(new Date())
+
+
+    // reset Timer
+    clearInterval(timer)
+    timer = startLogOutTimer()
     // Update UI
     updateUI(currentAccount);
+
   }
 });
 
@@ -212,10 +268,17 @@ btnLoan.addEventListener('click', function (e) {
     // Add movement
     currentAccount.movements.push(amount);
 
+    // add date
+
+    currentAccount.movementsDates.push(new Date())
+
     // Update UI
     updateUI(currentAccount);
   }
   inputLoanAmount.value = '';
+  // reset Timer
+  clearInterval(timer)
+  timer = startLogOutTimer()
 });
 
 btnClose.addEventListener('click', function (e) {
@@ -251,3 +314,14 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+
+// setTimeout((user)=> console.log(`Time is over for ${user}`), 3000, 'Manoj')
+// const date = new Date()
+// const hour = date.getHours();
+// const min = date.getMinutes();
+// const sec = date.getSeconds();
+// setInterval(()=> console.log(`${hour}:${min}:${sec}`), 3000)
+
+console.log('waiting...');
+

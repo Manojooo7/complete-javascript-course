@@ -1,14 +1,21 @@
 'use strict';
 
 ///////////////////////////////////////
-// Modal window
+// selecting element
 
+
+const header = document.querySelector('.header')
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1')
 
-const openModal = function () {
+// Model Window for opening account
+
+const openModal = function (e) {
+  e.preventDefault()
   modal.classList.remove('hidden');
   overlay.classList.remove('hidden');
 };
@@ -18,8 +25,10 @@ const closeModal = function () {
   overlay.classList.add('hidden');
 };
 
-for (let i = 0; i < btnsOpenModal.length; i++)
-  btnsOpenModal[i].addEventListener('click', openModal);
+btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal))
+
+// for (let i = 0; i < btnsOpenModal.length; i++)
+//   btnsOpenModal[i].addEventListener('click', openModal);
 
 btnCloseModal.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
@@ -29,3 +38,27 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
+
+// Creating and inserting an element
+// const message = document.createElement('div');
+// message.classList.add('cookie-message');
+// message.innerHTML = `We use cookies for improved functionally and analytics. <button class = "btn btn--close-cookie">Got It!</button>`
+// prepend add the elemt as an first elemt and append do the oppsoite
+// header.prepend(message)
+// header.append(message)
+// header.after(message)
+// header.before(message)
+
+// document.querySelector('.btn--close-cookie').addEventListener('click', ()=> message.remove())
+
+// hero scroll
+
+btnScrollTo.addEventListener('click', (e)=>{
+  const s1coords = section1.getBoundingClientRect()
+
+  console.log(s1coords)
+
+  console.log(e.target.getBoundingClientRect());
+  
+  console.log('CurrentScroll (X/Y)', window,scrollX,scrollY);
+})
