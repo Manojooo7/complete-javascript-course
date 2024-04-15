@@ -11,7 +11,10 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1')
-
+const nav = document.querySelector('.nav')
+const navLinks = document.querySelector('nav__links');
+const navLink = document.querySelector('nav__link');
+console.log(nav);
 // Model Window for opening account
 
 const openModal = function (e) {
@@ -55,10 +58,48 @@ document.addEventListener('keydown', function (e) {
 
 btnScrollTo.addEventListener('click', (e)=>{
   const s1coords = section1.getBoundingClientRect()
-
-  console.log(s1coords)
-
-  console.log(e.target.getBoundingClientRect());
+  // console.log(e.target.getBoundingClientRect());
+  // console.log('CurrentScroll (X/Y)', window,scrollX,scrollY);
+  // console.log('height/width viwport', document.documentElement.clientHeight, document.documentElement.clientWidth);  
   
-  console.log('CurrentScroll (X/Y)', window,scrollX,scrollY);
+  // window.scrollTo(s1coords.left + window.scrollX, s1coords.top + window.scrollY);
+  // window.scrollTo({
+  //   left: s1coords.left + window.scrollX,
+  //   top: s1coords.top + window.scrollY,
+  //   behavior: 'smooth'
+  // })
+
+  // Leatest Methods
+  section1.scrollIntoView({behavior: 'smooth'})
 })
+
+// const header1 = document.querySelector('h1');
+// console.log(header1);
+// const alert1 = (e)=>{
+//   alert('addEventListner: Great! You are reading the heading : D')
+// }
+
+// header1.addEventListener('mouseover', alert1)
+// header1.removeEventListener('mouseover', alert1)
+
+// setTimeout(()=>header1.addEventListener('mouseover', alert1), 3000)
+
+// scroll to show navbar
+
+let prevScroll = window.scrollY
+
+window.addEventListener('scroll',()=>{
+  const currentScroll = window.scrollY
+  if(currentScroll > 300 ){
+    nav.classList.add('sticky')
+  }
+  else{
+    nav.classList.remove('sticky')
+  }
+  // prevScroll = currentScroll
+})
+
+const randominit = (min, max) => {
+  Math.floor(Math.random() * (max-min+1) + min);
+  const randomColor = `rgb(${randominit(0,225)},${randominit(0,225)},${randominit(0,225)})`
+}
