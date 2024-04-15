@@ -12,9 +12,9 @@ const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1')
 const nav = document.querySelector('.nav')
-const navLinks = document.querySelector('nav__links');
-const navLink = document.querySelector('nav__link');
-console.log(nav);
+const navLinks = document.querySelector('.nav__links');
+const navLink = document.querySelector('.nav__link');
+// console.log(nav);
 // Model Window for opening account
 
 const openModal = function (e) {
@@ -99,7 +99,21 @@ window.addEventListener('scroll',()=>{
   // prevScroll = currentScroll
 })
 
-const randominit = (min, max) => {
-  Math.floor(Math.random() * (max-min+1) + min);
-  const randomColor = `rgb(${randominit(0,225)},${randominit(0,225)},${randominit(0,225)})`
-}
+const randominit = (min, max) => Math.floor(Math.random() * (max-min+1) + min);
+
+const randomColor = () => `rgb(${randominit(0,225)},${randominit(0,225)},${randominit(0,225)})`
+
+navLink.addEventListener('click',function(e){
+    this.style.backgroundColor = randomColor()
+  });
+
+navLinks.addEventListener('click',function(e){
+  this.style.backgroundColor = randomColor()
+  });
+
+nav.addEventListener('click',function(e){
+  this.style.backgroundColor = randomColor()
+  })
+
+
+// randominit()
