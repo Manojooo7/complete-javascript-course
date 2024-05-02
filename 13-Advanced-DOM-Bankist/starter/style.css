@@ -123,6 +123,7 @@ img {
   padding: 0 6rem;
   z-index: 100;
   position: relative;
+  transition: top 0.5s ease;
 }
 
 /* nav and stickly class at the same time */

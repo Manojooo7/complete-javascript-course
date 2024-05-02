@@ -13,7 +13,7 @@ const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1')
 const nav = document.querySelector('.nav')
 const navLinks = document.querySelector('.nav__links');
-const navLink = document.querySelector('.nav__link');
+const navLink = document.querySelectorAll('.nav__link');
 // console.log(nav);
 // Model Window for opening account
 
@@ -84,6 +84,8 @@ btnScrollTo.addEventListener('click', (e)=>{
 
 // setTimeout(()=>header1.addEventListener('mouseover', alert1), 3000)
 
+
+
 // scroll to show navbar
 
 let prevScroll = window.scrollY
@@ -96,24 +98,52 @@ window.addEventListener('scroll',()=>{
   else{
     nav.classList.remove('sticky')
   }
-  // prevScroll = currentScroll
+  prevScroll = currentScroll
 })
 
-const randominit = (min, max) => Math.floor(Math.random() * (max-min+1) + min);
 
-const randomColor = () => `rgb(${randominit(0,225)},${randominit(0,225)},${randominit(0,225)})`
+// click to navigate to the section
 
-navLink.addEventListener('click',function(e){
-    this.style.backgroundColor = randomColor()
-  });
+// NOT EFFICIENT
+// navLink.forEach(
+//   function(el){
+//     el.addEventListener('click', function(e){
+//       e.preventDefault()
+//       const id = this.getAttribute('href');
+//       console.log(id);
+//       document.querySelector(id).scrollIntoView({behavior: 'smooth'})
+//     })
+//   }
+// )
 
-navLinks.addEventListener('click',function(e){
-  this.style.backgroundColor = randomColor()
-  });
+// EVENT DELIGATION
+navLinks.addEventListener('click', (e)=>{
+  e.preventDefault()
+  if(e.target.classList.contains('.nav__link')){
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({behavior: 'smooth'})
+  }
+  // console.log(id);
+})
 
-nav.addEventListener('click',function(e){
-  this.style.backgroundColor = randomColor()
-  })
+// const randominit = (min, max) => Math.floor(Math.random() * (max-min+1) + min);
+
+// const randomColor = () => `rgb(${randominit(0,225)},${randominit(0,225)},${randominit(0,225)})`
+
+// navLink.addEventListener('click',function(e){
+//     this.style.backgroundColor = randomColor()
+    
+//     // stop propogation
+//     // e.stopPropogation
+//   });
+
+// navLinks.addEventListener('click',function(e){
+//   this.style.backgroundColor = randomColor()
+//   });
+
+// nav.addEventListener('click',function(e){
+//   this.style.backgroundColor = randomColor()
+//   })
 
 
 // randominit()
