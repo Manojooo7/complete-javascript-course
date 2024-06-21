@@ -56,12 +56,12 @@ document.addEventListener('keydown', function (e) {
 
 // hero scroll
 
-btnScrollTo.addEventListener('click', (e)=>{
+btnScrollTo.addEventListener('click', (e) => {
   const s1coords = section1.getBoundingClientRect()
   // console.log(e.target.getBoundingClientRect());
   // console.log('CurrentScroll (X/Y)', window,scrollX,scrollY);
   // console.log('height/width viwport', document.documentElement.clientHeight, document.documentElement.clientWidth);  
-  
+
   // window.scrollTo(s1coords.left + window.scrollX, s1coords.top + window.scrollY);
   // window.scrollTo({
   //   left: s1coords.left + window.scrollX,
@@ -70,7 +70,7 @@ btnScrollTo.addEventListener('click', (e)=>{
   // })
 
   // Leatest Methods
-  section1.scrollIntoView({behavior: 'smooth'})
+  section1.scrollIntoView({ behavior: 'smooth' })
 })
 
 // const header1 = document.querySelector('h1');
@@ -90,12 +90,12 @@ btnScrollTo.addEventListener('click', (e)=>{
 
 let prevScroll = window.scrollY
 
-window.addEventListener('scroll',()=>{
+window.addEventListener('scroll', () => {
   const currentScroll = window.scrollY
-  if(currentScroll > 300 ){
+  if (currentScroll > 300) {
     nav.classList.add('sticky')
   }
-  else{
+  else {
     nav.classList.remove('sticky')
   }
   prevScroll = currentScroll
@@ -117,11 +117,11 @@ window.addEventListener('scroll',()=>{
 // )
 
 // EVENT DELIGATION
-navLinks.addEventListener('click', (e)=>{
+navLinks.addEventListener('click', (e) => {
   e.preventDefault()
-  if(e.target.classList.contains('.nav__link')){
+  if (e.target.classList.contains('.nav__link')) {
     const id = e.target.getAttribute('href');
-    document.querySelector(id).scrollIntoView({behavior: 'smooth'})
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' })
   }
   // console.log(id);
 })
@@ -130,23 +130,49 @@ navLinks.addEventListener('click', (e)=>{
 
 // const randomColor = () => `rgb(${randominit(0,225)},${randominit(0,225)},${randominit(0,225)})`
 
-// navLink.addEventListener('click',function(e){
-//     this.style.backgroundColor = randomColor()
-    
-//     // stop propogation
-//     // e.stopPropogation
-//   });
-
-// navLinks.addEventListener('click',function(e){
-//   this.style.backgroundColor = randomColor()
-//   });
-
-// nav.addEventListener('click',function(e){
-//   this.style.backgroundColor = randomColor()
-//   })
 
 
 // randominit()
+
+
+const randomColor = () => {
+  let min = 0
+  let max = 225
+  const genretor = () => Math.floor(Math.random() * (max - min + 1) + min)
+  return `rgb(${genretor()},${genretor()},${genretor()})`
+}
+
+// navLink.addEventListener('click', function (e) {
+//   // this.style.backgroundColor = randomColor()
+//   console.log('LINK');
+//   // stop propogation
+//   // e.stopPropogation
+// });
+
+document.querySelector('.nav__link').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor()
+  // console.log('Link');
+  console.log(`Nav Link: ${e.target}`);
+
+
+});
+
+// console.log(navLink);
+
+navLinks.addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor()
+  // console.log('Link');
+  console.log(`Nav Links: ${e.target}`);
+
+});
+
+nav.addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor()
+  console.log(`Nav  : ${e.target}`);
+})
+
+console.log(randomColor());
+
 
 // tabbed container
 
@@ -154,16 +180,16 @@ const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContents = document.querySelectorAll('.operations__content');
 
-tabsContainer.addEventListener('click', (e)=> {
+tabsContainer.addEventListener('click', (e) => {
   const clicked = e.target.closest('.operations__tab');
   //  guard close
-  if(!clicked) return
+  if (!clicked) return
   // removing active classes
-  tabs.forEach(t=>t.classList.remove('operations__tab--active'));
-  tabsContents.forEach(c=>c.classList.remove('operations__content--active'))
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  tabsContents.forEach(c => c.classList.remove('operations__content--active'))
   // Active Tab
   clicked.classList.add('operations__tab--active');
-  
+
   // Active content area
   const contentArea = document.querySelector(`.operations__content--${clicked.dataset.tab}`)
   contentArea.classList.add('operations__content--active')
