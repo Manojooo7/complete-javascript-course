@@ -11,6 +11,9 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1')
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContents = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav')
 const navLinks = document.querySelector('.nav__links');
 const navLink = document.querySelectorAll('.nav__link');
@@ -117,14 +120,14 @@ window.addEventListener('scroll', () => {
 // )
 
 // EVENT DELIGATION
-navLinks.addEventListener('click', (e) => {
-  e.preventDefault()
-  if (e.target.classList.contains('.nav__link')) {
-    const id = e.target.getAttribute('href');
-    document.querySelector(id).scrollIntoView({ behavior: 'smooth' })
-  }
-  // console.log(id);
-})
+// navLinks.addEventListener('click', (e) => {
+//   e.preventDefault()
+//   if (e.target.classList.contains('.nav__link')) {
+//     const id = e.target.getAttribute('href');
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' })
+//   }
+//   // console.log(id);
+// })
 
 // const randominit = (min, max) => Math.floor(Math.random() * (max-min+1) + min);
 
@@ -149,41 +152,46 @@ const randomColor = () => {
 //   // e.stopPropogation
 // });
 
-document.querySelector('.nav__link').addEventListener('click', function (e) {
-  this.style.backgroundColor = randomColor()
-  // console.log('Link');
-  console.log(`Nav Link: ${e.target}`);
+// document.querySelector('.nav__link').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor()
+//   // console.log('Link');
+//   console.log(`Nav Link: ${e.target}`);
 
 
-});
+// });
 
 // console.log(navLink);
 
-navLinks.addEventListener('click', function (e) {
-  this.style.backgroundColor = randomColor()
-  // console.log('Link');
-  console.log(`Nav Links: ${e.target}`);
+// navLinks.addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor()
+//   // console.log('Link');
+//   console.log(`Nav Links: ${e.target}`);
 
-});
+// });
 
-nav.addEventListener('click', function (e) {
-  this.style.backgroundColor = randomColor()
-  console.log(`Nav  : ${e.target}`);
-})
+// nav.addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor()
+//   console.log(`Nav  : ${e.target}`);
+// })
 
 console.log(randomColor());
 
 
 // tabbed container
 
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContents = document.querySelectorAll('.operations__content');
+
+
+
+
+
 
 tabsContainer.addEventListener('click', (e) => {
   const clicked = e.target.closest('.operations__tab');
+
+  // console.log(clicked);
   //  guard close
   if (!clicked) return
+
   // removing active classes
   tabs.forEach(t => t.classList.remove('operations__tab--active'));
   tabsContents.forEach(c => c.classList.remove('operations__content--active'))
@@ -194,3 +202,55 @@ tabsContainer.addEventListener('click', (e) => {
   const contentArea = document.querySelector(`.operations__content--${clicked.dataset.tab}`)
   contentArea.classList.add('operations__content--active')
 });
+
+
+// Menu Fading Animation
+
+// const activeMenu = function (e) {
+//   if (e.target.classList.contains('nav__link')) {
+//     const link = e.target;
+//     const siblings = [...link.closest('.nav').querySelectorAll('.nav__link')]
+//     const logo = link.closest('.nav').querySelector('img')
+//     const allElemnts = [...siblings, logo]
+//     allElemnts.forEach(el => {
+//       if (el !== link) el.style.opacity = this
+//     }
+//     )
+//     // console.log(allElemnts);
+//   }
+// }
+
+// const activeMenu = (e) => {
+//   if (e.target.classList.contains('nav__link')) {
+//     const link = e.target;
+//     const siblings = [...link.closest('.nav').querySelectorAll('.nav__link')];
+//     const logo = link.closest('.nav').querySelector('img');
+//     const allElements = [...siblings, logo];
+//     allElements.forEach(el => {
+//       if (el !== link) el.style.opacity = this;
+//     });
+//   }
+// }
+
+// nav.addEventListener('mouseover', activeMenu.bind(0.5))
+// nav.addEventListener('mouseout', activeMenu.bind(1))
+
+const activeMenu = (opacity) => (e) => {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = [...link.closest('.nav').querySelectorAll('.nav__link')];
+    const logo = link.closest('.nav').querySelector('img');
+    const allElements = [...siblings, logo];
+    allElements.forEach(el => {
+      if (el !== link) el.style.opacity = opacity;
+    });
+  }
+};
+
+
+
+// const nav = document.querySelector('.nav');
+
+nav.addEventListener('mouseover', activeMenu(0.5));
+nav.addEventListener('mouseout', activeMenu(1));
+
