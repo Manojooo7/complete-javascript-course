@@ -17,6 +17,7 @@ const tabsContents = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav')
 const navLinks = document.querySelector('.nav__links');
 const navLink = document.querySelectorAll('.nav__link');
+const allSection = document.querySelectorAll('.section')
 // console.log(nav);
 // Model Window for opening account
 
@@ -60,19 +61,6 @@ document.addEventListener('keydown', function (e) {
 // hero scroll
 
 btnScrollTo.addEventListener('click', (e) => {
-  const s1coords = section1.getBoundingClientRect()
-  // console.log(e.target.getBoundingClientRect());
-  // console.log('CurrentScroll (X/Y)', window,scrollX,scrollY);
-  // console.log('height/width viwport', document.documentElement.clientHeight, document.documentElement.clientWidth);  
-
-  // window.scrollTo(s1coords.left + window.scrollX, s1coords.top + window.scrollY);
-  // window.scrollTo({
-  //   left: s1coords.left + window.scrollX,
-  //   top: s1coords.top + window.scrollY,
-  //   behavior: 'smooth'
-  // })
-
-  // Leatest Methods
   section1.scrollIntoView({ behavior: 'smooth' })
 })
 
@@ -91,30 +79,83 @@ btnScrollTo.addEventListener('click', (e) => {
 
 // scroll to show navbar
 
-let prevScroll = window.scrollY
+// let prevScroll = window.scrollY
 
-window.addEventListener('scroll', () => {
-  const currentScroll = window.scrollY
-  if (currentScroll > 300) {
+// window.addEventListener('scroll', () => {
+//   const currentScroll = window.scrollY
+//   if (currentScroll < prevScroll) {
+//     nav.classList.add('sticky')
+//   }
+//   else {
+//     nav.classList.remove('sticky')
+//   }
+//   prevScroll = currentScroll
+// })
+
+
+// New Methode for sticky nav 
+// const obsCallback = (entries, observer) => {
+//   entries.forEach(entry => { console.log(entry); })
+// }
+// const obsOptions = {
+//   root: null,
+//   threshold: [0, 0.1, 0.2]
+// }
+
+// const observer = new IntersectionObserver(obsCallback, obsOptions)
+// observer.observe(section1)
+
+// const header = document.querySelector('header')
+
+
+
+const navHeight = nav.getBoundingClientRect().height
+console.log(navHeight);
+const stickNav = (entries) => {
+  const [entry] = entries
+  if (!entry.isIntersecting) {
     nav.classList.add('sticky')
   }
-  else {
-    nav.classList.remove('sticky')
-  }
-  prevScroll = currentScroll
+  else nav.classList.remove('sticky')
+}
+
+const headerObserver = new IntersectionObserver(stickNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`
 })
 
+headerObserver.observe(header)
+
+
+const revealSection = (entries, observer) => {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return
+  entry.target.classList.remove('section--hidden')
+}
+
+const sectionObserver = new IntersectionObserver(revealSection,
+  {
+    root: null,
+    threshold: 0.13
+  })
+
+allSection.forEach((section) => {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden')
+  observer.unobserve(entry.target)
+})
 
 // click to navigate to the section
 
 // NOT EFFICIENT
 // navLink.forEach(
-//   function(el){
-//     el.addEventListener('click', function(e){
+//   function (el) {
+//     el.addEventListener('click', function (e) {
 //       e.preventDefault()
 //       const id = this.getAttribute('href');
 //       console.log(id);
-//       document.querySelector(id).scrollIntoView({behavior: 'smooth'})
+//       document.querySelector(id).scrollIntoView({ behavior: 'smooth' })
 //     })
 //   }
 // )
@@ -174,7 +215,7 @@ const randomColor = () => {
 //   console.log(`Nav  : ${e.target}`);
 // })
 
-console.log(randomColor());
+// console.log(randomColor());
 
 
 // tabbed container
@@ -220,20 +261,6 @@ tabsContainer.addEventListener('click', (e) => {
 //   }
 // }
 
-// const activeMenu = (e) => {
-//   if (e.target.classList.contains('nav__link')) {
-//     const link = e.target;
-//     const siblings = [...link.closest('.nav').querySelectorAll('.nav__link')];
-//     const logo = link.closest('.nav').querySelector('img');
-//     const allElements = [...siblings, logo];
-//     allElements.forEach(el => {
-//       if (el !== link) el.style.opacity = this;
-//     });
-//   }
-// }
-
-// nav.addEventListener('mouseover', activeMenu.bind(0.5))
-// nav.addEventListener('mouseout', activeMenu.bind(1))
 
 const activeMenu = (opacity) => (e) => {
   if (e.target.classList.contains('nav__link')) {
@@ -245,12 +272,8 @@ const activeMenu = (opacity) => (e) => {
       if (el !== link) el.style.opacity = opacity;
     });
   }
-};
+}
 
-
-
-// const nav = document.querySelector('.nav');
-
-nav.addEventListener('mouseover', activeMenu(0.5));
-nav.addEventListener('mouseout', activeMenu(1));
+nav.addEventListener('mouseover', activeMenu(0.5))
+nav.addEventListener('mouseout', activeMenu(1))
 
