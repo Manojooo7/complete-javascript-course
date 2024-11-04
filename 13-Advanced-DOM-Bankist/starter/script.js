@@ -19,6 +19,9 @@ const navLinks = document.querySelector('.nav__links');
 const navLink = document.querySelectorAll('.nav__link');
 const allSection = document.querySelectorAll('.section');
 const imgTarget = document.querySelectorAll('img[data-src]')
+const btnRight = document.querySelector('.slider__btn--right')
+const btnLeft = document.querySelector('.slider__btn--left')
+const dotContainer = document.querySelector('.dots')
 // console.log(nav);
 // Model Window for opening account
 
@@ -125,7 +128,7 @@ const sectionObserver = new IntersectionObserver(revealSection,
 
 allSection.forEach((section) => {
   sectionObserver.observe(section);
-  section.classList.add('section--hidden')
+  // section.classList.add('section--hidden')
 })
 
 
@@ -146,3 +149,67 @@ const lazyLoad = new IntersectionObserver(loadImg, { root: null, threshold: 0 })
 
 
 imgTarget.forEach(img => lazyLoad.observe(img))
+
+
+// Slider component
+
+const slides = document.querySelectorAll('.slide');
+const createDots = () =>{
+  slides.forEach(function(_, i){
+    console.log(i);
+    dotContainer.insertAdjacentHTML(
+      'beforeend',
+      `<button class="dots__dot" data-slide="${i}"></button>`
+    )
+  })
+}
+let currentSlide = 0;
+const maxSlide = slides.length
+
+
+const gotoSlide = (slide) =>{
+  slides.forEach((s, i)=> {
+    s.style.transform = `translateX(${100 * (i - slide)}%)`
+  })
+}
+
+gotoSlide(0)
+
+
+createDots()
+console.log(dotContainer);
+
+
+const nextSlide = ()=>{
+    if(currentSlide === maxSlide-1){
+      currentSlide = 0
+    }else{
+      currentSlide++
+    }
+    gotoSlide(currentSlide)
+}
+
+const prevSlide = () =>{
+  if (currentSlide === 0) {
+    currentSlide = maxSlide-1
+  }else{
+    currentSlide--
+  }
+  gotoSlide(currentSlide)
+}
+btnRight.addEventListener('click', nextSlide)
+btnLeft.addEventListener('click', prevSlide)
+
+// Key Evnets to chnage the slide
+document.addEventListener('keydown', (e)=>{
+  e.key === 'ArrowLeft' && prevSlide()
+  e.key === 'ArrowRight' && nextSlide()
+})
+
+dotContainer.addEventListener('click', (e)=>{
+  if(e.target.classList.contains("dots__dot")){
+    const {slide} = e.target.dataset;
+    console.log(slide);
+    gotoSlide(slide)
+  }
+})
